@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-api-exporter
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-api-exporter
+  template:
+    metadata:
+      labels:
+        app: db-api-exporter
+    spec:
+      containers:
+      - name: exporter
+        image: auctionindia.azurecr.io/db-connection-count:02
+        ports:
+        - containerPort: 9105
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-api-exporter
+  namespace: monitoring
+spec:
+  selector:
+    app: db-api-exporter
+  ports:
+  - name: metrics
+    port: 9105
+    targetPort: 9105
