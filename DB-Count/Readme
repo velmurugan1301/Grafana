@@ -1,0 +1,46 @@
+Prometheus + Custom Exporter + Grafana
+This is what serious production setups use.
+
+📊 What your Grafana dashboard would show
+Per-DB connection usage
+% utilization (Active / MaxAllowed)
+Threshold line at 280
+Spike history
+
+🟢 STEP 1: Create a Custom Exporter (Python – simple & reliable)
+📄db_api_exporter.py
+🟢 STEP 2: Dockerize the exporter
+📄Dockerfile
+🟢 STEP 3: Deploy exporter to Kubernetes
+📄 db-api-exporter.yaml
+🟢 STEP 4: Tell Prometheus to scrape it
+📄 db-api-servicemonitor.yaml
+-----------------------------------------------------------------------
+| File                         | Needed?  | Why                       |
+| ---------------------------- | -------  | ------------------------- |
+| `db-api-exporter.yaml`       | ✅ Yes   | runs your exporter        |
+| `db-api-servicemonitor.yaml` | ✅ Yes   | lets Prometheus scrape it |
+-----------------------------------------------------------------------
+✅ Final Architecture (clean & standard)
+----------------------------------------
+DB Health API
+   ↓
+Custom DB Exporter (K8s Pod)
+   ↓   /metrics
+Prometheus
+   ↓
+Grafana Dashboard
+
+1️⃣ Open Prometheus UI:
+kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-stack-prometheus 9090
+2️⃣ Go to the Graph tab:
+3️⃣ Run the metric query:
+db_active_connections
+
+✅ The ONE setting you need: Legend format:
+🔹 Query : db_active_connections
+🔹 Legend : {{database}}
+🔹 Min step : empty or auto
+🔹 Format : Time series
+🔹 Type : Range
+
