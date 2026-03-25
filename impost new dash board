@@ -1,0 +1,38 @@
+1️⃣Export your dashboard JSON:
+-----------------------------
+In Grafana:
+  ->Open your dashboard
+  ->Click Share
+  ->Click Export
+  ->Save the JSON file
+Example:db-connections-dashboard.json
+
+2️⃣ Create ConfigMap for the dashboard:
+--------------------------------------
+Run:
+->kubectl create configmap db-connections-dashboard \
+--from-file=db-connections-dashboard.json \
+-n monitoring
+
+3️⃣ Add Grafana label (IMPORTANT):
+---------------------------------
+->kubectl label configmap db-connections-dashboard grafana_dashboard=1 -n monitoring
+
+4️⃣ Wait ~30 seconds
+-------------------
+
+The Grafana sidecar will detect the new ConfigMap.
+
+Then refresh Grafana → Dashboard will appear automatically.
+
+Even if the pod restarts, dashboard stays.
+
+🔎 Verify it worked:-
+->kubectl get configmap -n monitoring | grep dashboard
+🔎 Verify the label:-
+->kubectl get configmap db-connections-dashboard -n monitoring --show-labels
+You must see something like:grafana_dashboard=1
+
+Restart the Grafana pod once:-
+------------------------------
+->kubectl delete pod -n monitoring kube-prometheus-stack-grafana-5c47675654-6blds
