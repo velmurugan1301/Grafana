@@ -15,12 +15,14 @@ Spike history
 📄 db-api-exporter.yaml
 🟢 STEP 4: Tell Prometheus to scrape it
 📄 db-api-servicemonitor.yaml
+
 -----------------------------------------------------------------------
 | File                         | Needed?  | Why                       |
 | ---------------------------- | -------  | ------------------------- |
 | `db-api-exporter.yaml`       | ✅ Yes   | runs your exporter        |
 | `db-api-servicemonitor.yaml` | ✅ Yes   | lets Prometheus scrape it |
 -----------------------------------------------------------------------
+
 ✅ Final Architecture (clean & standard)
 ----------------------------------------
 DB Health API
